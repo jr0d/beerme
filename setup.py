@@ -17,9 +17,7 @@ setup(name='beerme',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          # -*- Extra requirements: -*-
-      ],
+      install_requires=["beautifulsoup4"],
       entry_points={
         'console_scripts': [
             'beerme=beerme.beerme:main'
