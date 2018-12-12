@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import argparse
 import json
@@ -40,6 +40,21 @@ def get_tap_list(script_data):
     return tap_list
 
 
+def parse_containers(containers):
+    _containers = []
+    container_items = containers.find_all('span', {'class': 'container-item'})
+    for container_item in container_items:
+        container_dict = {}
+        for container_element in container_item.children:
+            _class = container_element.attrs['class'][0]
+            if _class == 'price':
+                container_dict['price'] = container_element.contents[1]
+            else:
+                container_dict[_class.replace('-', '_')] = container_element.string
+        _containers.append(container_dict)
+    return _containers
+
+
 def parse_info(tap_list):
     parsed_tap_list = []
     for page in tap_list:
@@ -50,9 +65,11 @@ def parse_info(tap_list):
             for item in span_items:
                 result = info_element.find('span', {'class': item})
                 if result:
-                    info_dict[item] = result.string
+                    info_dict[item.replace('-', '_')] = result.string
                 else:
-                    info_dict[item] = None
+                    info_dict[item.replace('-', '_')] = None
+            containers = info_element.find('div', {'class': 'containers'})
+            info_dict['containers'] = parse_containers(containers)
             parsed_tap_list.append(info_dict)
     return parsed_tap_list
 
@@ -62,9 +79,15 @@ def list_locations():
         print(f'{location} : {taplist}')
 
 
+def list_output(data):
+    pass
+
+
 def main():
-    a = argparse.ArgumentParser('BeerMe BigHops Script v0.1')
+    a = argparse.ArgumentParser('beerme', description='BeerMe BigHops script v0.3')
     a.add_argument('--list', action='store_true', help='list available locations')
+    a.add_argument('-J', '--json', action='store_true', help='Output information in json')
+    a.add_argument('--dump', action='store_true', help='Dump the raw tap list html')
     a.add_argument('location', help='Beer target', default='', nargs='?')
     namespace = a.parse_args()
 
@@ -89,7 +112,17 @@ def main():
     # Currently, the first script is the one we want
     _tap_list = get_tap_list(tap_list_page.find('script').string)
 
-    print(json.dumps(parse_info(_tap_list), indent=2))
+    if namespace.dump:
+        for i, page in enumerate(_tap_list):
+            with open('{}-taplist-{}.html'.format(namespace.location, i), 'w') as fp:
+                fp.write(page['html'])
+        sys.exit(0)
+
+    tap_data = parse_info(_tap_list)
+    if namespace.json:
+        print(json.dumps(tap_data, indent=2))
+    else:
+        print('Not implemented')
 
 
 if __name__ == '__main__':
