@@ -27,5 +27,5 @@ optional arguments:
 
 ## Notice
 
-I do not represent Big Hops or Untapped in anyway. Use this software at your own risk.
+I do not represent Big Hops or Untapped in any way. Use this software at your own risk.
 
