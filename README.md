@@ -33,6 +33,8 @@ optional arguments:
   --dump      Dump the raw tap list html
 ```
 
+**The -J/--json switch is currently _required_**
+
 ## Notice
 
 I do not represent Big Hops or Untapped in any way. Use this software at your own risk.
