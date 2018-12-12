@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
-import argparse
-import json
+import os
 import sys
 
-from html.parser import HTMLParser
-
-from bs4 import BeautifulSoup
+import argparse
+import json
 import requests
 
+from bs4 import BeautifulSoup
 
 location_map = {
     'bh-bridge': 'https://business.untappd.com/boards/24264',
@@ -76,15 +75,22 @@ def parse_info(tap_list):
 
 def list_locations():
     for location, taplist in location_map.items():
-        print(f'{location} : {taplist}')
+        print('{} : {}'.format(location, taplist))
 
 
 def list_output(data):
     pass
 
 
+def get_version():
+    with open('{}/../VERSION'.format(os.path.dirname(__file__))) as fp:
+        return fp.read().strip()
+
+
 def main():
-    a = argparse.ArgumentParser('beerme', description='BeerMe BigHops script v0.3')
+    a = argparse.ArgumentParser(
+        'beerme',
+        description='BeerMe BigHops script {}'.format(get_version()))
     a.add_argument('--list', action='store_true', help='list available locations')
     a.add_argument('-J', '--json', action='store_true', help='Output information in json')
     a.add_argument('--dump', action='store_true', help='Dump the raw tap list html')
@@ -102,7 +108,7 @@ def main():
 
     url = location_map.get(namespace.location)
     if not url:
-        print(f'{namespace.location} does not exist')
+        print('{} does not exist'.format(namespace.location))
         list_locations()
         sys.exit(1)
 
