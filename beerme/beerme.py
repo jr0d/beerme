@@ -9,6 +9,9 @@ import requests
 
 from bs4 import BeautifulSoup
 
+from . import get_version
+
+
 location_map = {
     'bh-bridge': 'https://business.untappd.com/boards/24264',
     'bh-bitters': 'https://business.untappd.com/boards/24239',
@@ -80,11 +83,6 @@ def list_locations():
 
 def list_output(data):
     pass
-
-
-def get_version():
-    with open('{}/../VERSION'.format(os.path.dirname(__file__))) as fp:
-        return fp.read().strip()
 
 
 def main():
