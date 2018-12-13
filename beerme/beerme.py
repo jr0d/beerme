@@ -51,7 +51,7 @@ def parse_containers(containers):
             if _class == 'price':
                 container_dict['price'] = container_element.contents[1]
             else:
-                container_dict[_class.replace('-', '_')] = container_element.string
+                container_dict[_class.replace('-', '_')] = container_element.string.strip()
         _containers.append(container_dict)
     return _containers
 
@@ -66,7 +66,7 @@ def parse_info(tap_list):
             for item in span_items:
                 result = info_element.find('span', {'class': item})
                 if result:
-                    info_dict[item.replace('-', '_')] = result.string
+                    info_dict[item.replace('-', '_')] = result.string.strip()
                 else:
                     info_dict[item.replace('-', '_')] = None
             containers = info_element.find('div', {'class': 'containers'})
@@ -80,9 +80,42 @@ def list_locations():
         print('{} : {}'.format(location, taplist))
 
 
-def list_output(data):
-    pass
+def list_output(data, show_containers=False):
+    for bev in data:
+        print('{name} / {brewery}\n{style} | {abv}'.format(**bev))
+        if show_containers:
+            for container in bev['containers']:
+                print('\t{} ${} {}'.format(
+                    container.get('name'),
+                    container.get('price'),
+                    container.get('container_calories')))
+        print()
 
+def bottle_or_can_filter(bev):
+    for container in bev['containers']:
+        if 'Bottle' in container['name'] or 'Can' in container['name']:
+            return False
+    return True
+
+def keyword_search(bev, search_terms):
+    for key in bev:
+        if key == 'containers':
+            continue
+        for search_term in search_terms:
+            if bev[key]:
+                if search_term.lower() in bev[key].lower():
+                    return True
+    return False
+
+def keyword_filter(bev, search_terms):
+    for key in bev:
+        if key == 'containers':
+            continue
+        for search_term in search_terms:
+            if bev[key]:
+                if search_term.lower() in bev[key].lower():
+                    return False
+    return True
 
 def main():
     a = argparse.ArgumentParser(
@@ -92,6 +125,14 @@ def main():
     a.add_argument('-J', '--json', action='store_true', help='Output information in json')
     a.add_argument('--dump', action='store_true', help='Dump the raw tap list html')
     a.add_argument('location', help='Beer target', default='', nargs='?')
+    a.add_argument('-p', '--show-prices', action='store_true', help='Show price and volume data')
+    a.add_argument('-d', '--draft-only', action='store_true', help='Exclude bottles and cans')
+    a.add_argument('-f', '--fills-only', action='store_true',
+        help='Only include beer that can be purchased in growlers')
+    a.add_argument('-s', '--search', action='append', help='A keyword to search for. For example: "IPA". '
+                   'This can be used multiple times to create a compound search')
+    a.add_argument('-e', '--exclude', action='append', help='A keyword used to exclude results. For example: "Sour". '
+                   'This can be used multiple times')
     namespace = a.parse_args()
 
     if namespace.list:
@@ -122,10 +163,19 @@ def main():
         sys.exit(0)
 
     tap_data = parse_info(_tap_list)
+
+    if namespace.draft_only:
+        tap_data = filter(bottle_or_can_filter, tap_data)
+
+    print(namespace.search)
+    if namespace.search:
+        tap_data = filter(lambda bev: keyword_search(bev, namespace.search), tap_data)
+    if namespace.exclude:
+        tap_data = filter(lambda bev: keyword_filter(bev, namespace.exclude), tap_data)
     if namespace.json:
         print(json.dumps(tap_data, indent=2))
     else:
-        print('Not implemented')
+        list_output(tap_data, namespace.show_prices)
 
 
 if __name__ == '__main__':
