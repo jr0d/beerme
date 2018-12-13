@@ -167,7 +167,6 @@ def main():
     if namespace.draft_only:
         tap_data = filter(bottle_or_can_filter, tap_data)
 
-    print(namespace.search)
     if namespace.search:
         tap_data = filter(lambda bev: keyword_search(bev, namespace.search), tap_data)
     if namespace.exclude:

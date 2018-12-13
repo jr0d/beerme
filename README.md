@@ -42,9 +42,53 @@ optional arguments:
   -e EXCLUDE, --exclude EXCLUDE
                         A keyword used to exclude results. For example:
                         "Sour". This can be used multiple times
-
+```
+For example:
 
 ```
+$ beerme bh-bitters -s IPA -s Pale -e Imperial
+Tejas Clara / Big Bend
+Lager - Pale | 4.3% ABV
+
+Merry Buffing Xmas / Buffalo Bayou
+IPA - American brewed with Spruce tips | 7.6% ABV
+
+Axis IPA / Real Ale
+IPA - American | 7% ABV
+
+Pub Crawl / Saint Arnold
+Pale Ale - American | 4.7% ABV
+
+Syncopation / NOLA
+IPA - American | 6% ABV
+
+Celebration Ale / Sierra Nevada
+IPA - American | 6.8% ABV
+
+Accumulation (2018) / New Belgium
+IPA - White | 6.2% ABV
+
+Citradelic: Tangerine IPA / New Belgium
+IPA - American | 6% ABV
+
+SMaSh and GRaB / Legal Draft Beer
+IPA - American | 6.2% ABV
+```
+
+## Locations
+
+Currently, I have hard code the following location map in the source
+
+```python
+location_map = {
+    'bh-bridge': 'https://business.untappd.com/boards/24264',
+    'bh-bitters': 'https://business.untappd.com/boards/24239',
+    'bh-huebner': 'https://business.untappd.com/boards/24278',
+    'bh-shaenfield': 'https://business.untappd.com/boards/27711'
+}
+```
+
+It should be trivial to adapt this source to work with other locales
 
 ## Notice
 
