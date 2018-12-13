@@ -29,16 +29,13 @@ span_items = [
 
 
 def get_tap_list(script_data):
-    tap_list = []
     for line in [_l.strip() for _l in script_data.splitlines()]:
         if not line:
             continue
         var, value = line.split('=', 1)
         if var.strip() == 'window.ITEMS_ARRAY':
             scrubbed = value.strip(';')
-            tap_list = json.loads(scrubbed)
-            break
-    return tap_list
+            return json.loads(scrubbed)
 
 
 def parse_containers(containers):
@@ -85,17 +82,19 @@ def list_output(data, show_containers=False):
         print('{name} / {brewery}\n{style} | {abv}'.format(**bev))
         if show_containers:
             for container in bev['containers']:
-                print('\t{} ${} {}'.format(
+                print('\t{}\t${}\t{}'.format(
                     container.get('name'),
                     container.get('price'),
                     container.get('container_calories')))
         print()
+
 
 def bottle_or_can_filter(bev):
     for container in bev['containers']:
         if 'Bottle' in container['name'] or 'Can' in container['name']:
             return False
     return True
+
 
 def keyword_search(bev, search_terms):
     for key in bev:
@@ -107,6 +106,7 @@ def keyword_search(bev, search_terms):
                     return True
     return False
 
+
 def keyword_filter(bev, search_terms):
     for key in bev:
         if key == 'containers':
@@ -116,6 +116,7 @@ def keyword_filter(bev, search_terms):
                 if search_term.lower() in bev[key].lower():
                     return False
     return True
+
 
 def main():
     a = argparse.ArgumentParser(
@@ -129,9 +130,11 @@ def main():
     a.add_argument('-d', '--draft-only', action='store_true', help='Exclude bottles and cans')
     a.add_argument('-f', '--fills-only', action='store_true',
         help='Only include beer that can be purchased in growlers')
-    a.add_argument('-s', '--search', action='append', help='A keyword to search for. For example: "IPA". '
+    a.add_argument('-s', '--search', action='append',
+                   help='A keyword to search for. For example: "IPA". '
                    'This can be used multiple times to create a compound search')
-    a.add_argument('-e', '--exclude', action='append', help='A keyword used to exclude results. For example: "Sour". '
+    a.add_argument('-e', '--exclude', action='append',
+                   help='A keyword used to exclude results. For example: "Sour". '
                    'This can be used multiple times')
     namespace = a.parse_args()
 
