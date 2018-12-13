@@ -15,9 +15,6 @@ sudo or the `--user` flag for `pip`
 
 ## Usage
 
-This version of beerme only has `json` output support. I will add console formatted output
-and the ability to filter, sort, and search at some point in the future. 
-
 ```
 usage: beerme [-h] [--list] [-J] [--dump] [-p] [-d] [-f] [-s SEARCH]
               [-e EXCLUDE]
