@@ -19,21 +19,32 @@ This version of beerme only has `json` output support. I will add console format
 and the ability to filter, sort, and search at some point in the future. 
 
 ```
-usage: beerme [-h] [--list] [-J] [--dump] [location]
+usage: beerme [-h] [--list] [-J] [--dump] [-p] [-d] [-f] [-s SEARCH]
+              [-e EXCLUDE]
+              [location]
 
-BeerMe BigHops script v0.4
+BeerMe BigHops script 0.9
 
 positional arguments:
-  location    Beer target
+  location              Beer target
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --list      list available locations
-  -J, --json  Output information in json
-  --dump      Dump the raw tap list html
-```
+  -h, --help            show this help message and exit
+  --list                list available locations
+  -J, --json            Output information in json
+  --dump                Dump the raw tap list html
+  -p, --show-prices     Show price and volume data
+  -d, --draft-only      Exclude bottles and cans
+  -f, --fills-only      Only include beer that can be purchased in growlers
+  -s SEARCH, --search SEARCH
+                        A keyword to search for. For example: "IPA". This can
+                        be used multiple times to create a compound search
+  -e EXCLUDE, --exclude EXCLUDE
+                        A keyword used to exclude results. For example:
+                        "Sour". This can be used multiple times
 
-**The -J/--json switch is currently _required_**
+
+```
 
 ## Notice
 
