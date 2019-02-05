@@ -1,9 +1,9 @@
 # BeerMe
 
-beerme is an untapped scraper for Big Hops locations in San Antonio, TX.
-I built this utility because javascript page flipper is either too slow or too fast
-(depending on which page you are looking at). Untapped does provide API access, but
-only to certain individuals.
+beerme is an Untappd scraper for Big Hops locations in San Antonio, TX.
+I built this utility because the Javascript page flipper is either too slow or
+too fast (depending on which page you are looking at). Untappd does provide API
+access but only to certain individuals.
 
 ## Installation
 ```shell
@@ -89,5 +89,4 @@ It should be trivial to adapt this source to work with other locales
 
 ## Notice
 
-I do not represent Big Hops or Untapped in any way. Use this software at your own risk.
-
+I do not represent Big Hops or Untappd in any way. Use this software at your own risk.
