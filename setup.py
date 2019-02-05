@@ -12,7 +12,15 @@ setup(name='beerme',
       version=get_version(),
       description="Untapped beer list scraper for Big Hops San Antonio",
       long_description=read_file('README.md'),
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[
+        "Development Status :: 4 - Beta",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Operating System :: OS Independent",
+      ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='BigHops,beer',
       author='Jared Rodriguez',
       author_email='jared@blacknode.net',
@@ -29,5 +37,6 @@ setup(name='beerme',
         'console_scripts': [
             'beerme=beerme.beerme:main'
         ]
-      }
-      )
+      },
+      requires_python='>=3.5',
+)
